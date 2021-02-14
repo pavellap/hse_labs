@@ -9,7 +9,13 @@
 
 using namespace std;
 
-
+template<typename T>
+void print_array(vector<T> array) {
+    for (auto iterator = array.begin(); iterator != array.end(); iterator++) {
+        cout << *iterator << " ";
+    }
+    cout << "" << endl;
+}
 
 int second_part_first_task(vector<float> &array) {
     int counter = 0;
@@ -35,6 +41,26 @@ void second_part_second_task(vector<float> &array, float k) {
 
 void second_part_third_task(vector<float> &array) {
     reverse(array.begin(), array.begin() + 5);
+}
+
+void second_part_fourth_task(vector<float> &array) {
+    vector<int> zeros;
+    // push to zeros array indices of elements equal to zero
+    for (int i = 0; i < array.size(); i++) {
+        if (utils::compare_floats(array[i], 0))
+            zeros.push_back(i);
+    }
+    cout << "Array of zeros: " << endl;
+    print_array(zeros);
+    for (int item : zeros) {
+        array.erase(array.begin() + item);
+        array.push_back(0);
+    }
+}
+
+void second_part_fifth_task(vector<float> &array) {
+    auto maxElementIterator = max_element(array.begin(), array.end());
+    sort(array.begin(), maxElementIterator);
 }
 
 /**
@@ -96,13 +122,7 @@ std::string check_first_condition(vector<int> array) {
     return "YES";
 }
 
-template<typename T>
-void print_array(vector<T> array) {
-    for (auto iterator = array.begin(); iterator != array.end(); iterator++) {
-        cout << *iterator << " ";
-    }
-    cout << "" << endl;
-}
+
 
 
 int main() {
@@ -134,12 +154,11 @@ int main() {
     cout << "Please input length of array: ";
     unsigned int size;
     cin >> size;
-
     vector<float> real_array = generate_real_array(size);
     cout << "Generated array: " << endl;
     print_array(real_array);
 
-    vector<float> sample({4.3, 5.0, 1.3, 10, 3, 4, 5, 3.1});
+    vector<float> sample({4.3, 0,  5.0, 1.3, 0, 10, 3, 4, 5, 3.1});
     second_part_first_task(sample);
 
     cout << "Please, input number K: " << endl;
@@ -150,5 +169,10 @@ int main() {
     second_part_third_task(sample);
     cout << "After change: " << endl;
     print_array(sample);
+    cout << "Second part 4th task: " << endl;
+    second_part_fourth_task(sample);
+    print_array(sample);
+    second_part_fifth_task(real_array);
+    print_array(real_array);
     return 0;
 }
