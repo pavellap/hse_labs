@@ -9,12 +9,38 @@
 
 using namespace std;
 
+
 template<typename T>
 void print_array(vector<T> array) {
     for (auto iterator = array.begin(); iterator != array.end(); iterator++) {
         cout << *iterator << " ";
     }
     cout << "" << endl;
+}
+
+vector<int> getIntegerVectorFromUser() {
+    unsigned int length;
+    cout << "Please, specify length of array: " << endl;
+    cin >> length;
+    vector<int> array;
+    for (int i = 0; i < length; i++) {
+        cout << "Input " << i + 1 << "th element:";
+        int element;
+        cin >> element;
+        array.push_back(element);
+    }
+    return array;
+}
+
+vector<float> getFloatVectorFromUser(unsigned int length) {
+    vector<float> array;
+    for (int i = 0; i < length; i++) {
+        cout << "Input " << i + 1 << "th element: ";
+        float element;
+        cin >> element;
+        array.push_back(element);
+    }
+    return array;
 }
 
 int second_part_first_task(vector<float> &array) {
@@ -29,18 +55,35 @@ int second_part_first_task(vector<float> &array) {
     if (counter == array.size())
         cout << "There are no elements matching condition";
     else
-        cout << "Found element multiple of 5" << endl << "Elements before this element: " << counter << endl;
+        cout << "Found element multiple of 5" << endl << "Amount of elements before this element: " << counter << endl;
     return counter;
 }
 
-void second_part_second_task(vector<float> &array, float k) {
+void second_part_second_task(vector<float> &array) {
+
+    cout << "Please, input number K: " << endl;
+    float k;
+    cin >> k;
+    cout << "Array before change:" << endl;
+    print_array(array);
+    cout << "So, we multiply elements, that equal to " << k << endl;
     transform(array.begin(), array.end(), array.begin(), [k](float &c) {
         return utils::compare_floats(c, k) ? c * 2 : c;
     });
+    cout << "Array after change: " << endl;
+    print_array(array);
 }
 
 void second_part_third_task(vector<float> &array) {
-    reverse(array.begin(), array.begin() + 5);
+    if (array.size() >= 5) {
+        cout << "Array before reverse: " << endl;
+        print_array(array);
+        reverse(array.begin(), array.begin() + 5);
+        cout << "Array after reverse: " << endl;
+        print_array(array);
+    }
+    else
+        cout << "Array's length is shorter than 5, cannot perform action...";
 }
 
 void second_part_fourth_task(vector<float> &array) {
@@ -50,18 +93,32 @@ void second_part_fourth_task(vector<float> &array) {
         if (utils::compare_floats(array[i], 0))
             zeros.push_back(i);
     }
-    cout << "Array of zeros: " << endl;
-    print_array(zeros);
-    for (int item : zeros) {
-        array.erase(array.begin() + item);
-        array.push_back(0);
+
+    if (zeros.empty()) {
+        cout << "There are no elements that equal to 0 " << endl;
+        return;
     }
+    else {
+        cout << "Array before change: " << endl;
+        print_array(array);
+        for (int item : zeros) {
+            array.erase(array.begin() + item);
+            array.push_back(0);
+        }
+        cout << "Array after change: " << endl;
+        print_array(array);
+    }
+
 }
 
 void second_part_fifth_task(vector<float> &array) {
-    auto maxElementIterator = max_element(array.begin(), array.end());
-    sort(array.begin(), maxElementIterator);
+    cout << "Array before change: " << endl;
+    print_array(array);
+    sort(array.begin(), max_element(array.begin(), array.end()));
+    cout << "Array after change: " << endl;
+    print_array(array);
 }
+
 
 /**
  * Function generates vector filled with random numbers with given size of array
@@ -114,33 +171,70 @@ vector<float> generate_real_array(unsigned int size = 40, int left_limit = -1000
 std::string check_first_condition(vector<int> array) {
     for (auto iterator = array.begin(); iterator != array.end(); iterator++) {
         if (*iterator < 0 or *iterator % 2 == 1) {
-            cout << "NO" << endl;
             return "NO";
         }
     }
-    cout << "YES" << endl;
     return "YES";
 }
 
+void start_first_task() {
+    cout << "------- FIRST PART -------" << endl;
+    string answer;
+    cout << "Do you want array to be generated automatically: (y/n)?" << endl;
+    cin >> answer;
+    if (answer == "y") {
+        string another_answer;
+        cout << "Do you want to generate array than matches conditions of first part of the task? (y/n)?" << endl;
+        cin >> another_answer;
+        vector<int> array;
+        if (another_answer == "y")
+            array = makeRandomVector(40, 0, 10000, true);
+        else
+            array = makeRandomVector();
+        cout << "Okay, we generated this array for you: " << endl;
+        print_array(array);
+        cout << "Checking conditions of the first task..." << endl;
+        cout << "The answer is: " << check_first_condition(array) << endl;
+    } else {
+        auto array = getIntegerVectorFromUser();
+        cout << "You have created this array: " << endl;
+        print_array(array);
+        cout << "Checking conditions of the first task for your array... " << endl;
 
+        cout << "The answer is: " << check_first_condition(array) << endl;
+    }
+}
 
+void start_second_task() {
+    cout << "------- SECOND PART -------" << endl;
+    cout << "Please specify length of array: ";
+    unsigned int size;
+    cin >> size;
+    string answer;
+    cout << "Do you want array to be generated automatically: (y/n)?" << endl;
+    cin >> answer;
+
+    vector<float> array;
+
+    if (answer == "y") {
+        array = generate_real_array(size);
+        cout << "We have generated this array with given length: " << endl;
+        print_array(array);
+    }
+    else {
+        array = getFloatVectorFromUser(size);
+    }
+
+    second_part_first_task(array);
+    second_part_second_task(array);
+    second_part_third_task(array);
+    second_part_fourth_task(array);
+    second_part_fifth_task(array);
+}
 
 int main() {
     /**1st part of the task*/
-    auto generated_vector = makeRandomVector();
-    auto evens = makeRandomVector(40, 0, 10000, true);
-
-    /**uncomment these lines to print arrays*/
-    //print_array(generated_vector);
-    //print_array(evens);
-
-    std::string result_first = check_first_condition(generated_vector);
-    std::string result_second = check_first_condition(evens);
-
-    // make test for generated array
-    assert(result_first == "NO");
-    assert(result_second == "YES");
-
+    start_first_task();
 
     /**
      * 2st part of the task
@@ -151,28 +245,8 @@ int main() {
         элемента
      *
      * */
-    cout << "Please input length of array: ";
-    unsigned int size;
-    cin >> size;
-    vector<float> real_array = generate_real_array(size);
-    cout << "Generated array: " << endl;
-    print_array(real_array);
 
-    vector<float> sample({4.3, 0,  5.0, 1.3, 0, 10, 3, 4, 5, 3.1});
-    second_part_first_task(sample);
+    start_second_task();
 
-    cout << "Please, input number K: " << endl;
-    float k;
-    cin >> k;
-    second_part_second_task(sample, k);
-    print_array(sample);
-    second_part_third_task(sample);
-    cout << "After change: " << endl;
-    print_array(sample);
-    cout << "Second part 4th task: " << endl;
-    second_part_fourth_task(sample);
-    print_array(sample);
-    second_part_fifth_task(real_array);
-    print_array(real_array);
     return 0;
 }
