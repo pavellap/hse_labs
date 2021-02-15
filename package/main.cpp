@@ -3,7 +3,6 @@
 #include <random>
 #include <algorithm>
 #include <iterator>
-#include <cassert>
 #include <cmath>
 #include "utils.cpp"
 
