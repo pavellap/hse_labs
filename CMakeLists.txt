@@ -3,4 +3,4 @@ project(hse_labs)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(hse_labs package/string.cpp)
+add_executable(hse_labs package/3.set.cpp)
