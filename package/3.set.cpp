@@ -90,7 +90,7 @@ void calc_new_set(const set<int> &a_set, const set<int> &b_set) {
     set_symmetric_difference(a_set.begin(), a_set.end(),
                              b_set.begin(), b_set.end(), inserter(first_set, first_set.begin()));
     set_intersection(a_set.begin(), a_set.end(),
-                               b_set.begin(), b_set.end(), inserter(buffer_first, buffer_first.begin()));
+                     b_set.begin(), b_set.end(), inserter(buffer_first, buffer_first.begin()));
     set_union(a_set.begin(), a_set.end(),
               b_set.begin(), b_set.end(), inserter(buffer_second, buffer_second.begin()));
     set_difference(buffer_first.begin(), buffer_first.end(),
