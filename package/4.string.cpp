@@ -54,7 +54,7 @@ void concat_strings(const vector<string> &array) {
 string remove_numbers(string &word) {
     unsigned int helper = 0;
     for (auto i : word) {
-        if (!std::isdigit(i)) {
+        if (!isdigit(i)) {
             word[helper] = i;
             helper++;
         }
@@ -105,6 +105,7 @@ int main() {
     first_task(strings_set);
 
     second_task(strings_set);
+
     third_task(strings_set);
     return 0;
 }
