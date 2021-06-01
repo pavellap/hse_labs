@@ -3,19 +3,21 @@
 баллов сдали ЕГЭ. Требуется написать программу, которая выводит номера
 школ, где средний балл больше среднего по району.*/
 
+// assuming, that every student has 4 marks
 #include <map>
 #include <string>
 #include <array>
 #include <vector>
 #include <time.h>
+#include <any>
 #include "utils.cpp"
 
 using namespace std;
 
 
-// assuming, that every student has 4 marks
-using student = pair<string, array<int, 4>>;
-using school_structure = map<int, vector<student>>;
+using student_marks = array<size_t, 4>;
+using student = pair<string, student_marks>;
+using school_structure = map<string, any>;
 
 
 const vector<string> males_names = {"Павел", "Александр", "Максим", "Фёдор", "Юрий", "Евгений", "Сергей", "Артём", "Михаил"};
@@ -39,11 +41,11 @@ string generate_name() {
     return get_random_element_from_array(last_names) + "а " + get_random_element_from_array(females_names);
 }
 
-array<int, 4> generate_marks() {
-    array<int, 4> result{};
-    for (int i = 0; i < 4; i++)
-        result[i] = get_random_int_from_range(0, 100);
-    return result;
+student_marks generate_marks() {
+    student_marks marks;
+    for (unsigned long long & mark : marks)
+        mark = get_random_int_from_range(0, 100);
+    return marks;
 }
 
 vector<student> generate_students(unsigned short length) {
@@ -55,18 +57,56 @@ vector<student> generate_students(unsigned short length) {
     return result;
 }
 
+float calc_average_score(const vector<student> &students) {
+    float score = 0;
+    for (auto i = students.begin(); i < students.end(); i++) {
+        for (auto j = i->second.begin(); j < i->second.end(); j++) {
+            score += *j;
+        }
+
+    }
+    cout << "Calculated average score:  " << score / 4 / students.size() << endl;
+    return score / 4 / students.size();
+}
+
+vector<school_structure> form_schools(unsigned short amount) {
+    vector<school_structure> schools;
+    for (unsigned int i = 0; i < amount; i++) {
+        school_structure new_school;
+        new_school["number"] = i;
+        auto students = generate_students(50);
+        new_school["students"] = students;
+        new_school["average_score"] = calc_average_score(students);
+        schools.push_back(new_school);
+    }
+    return schools;
+}
+
+float calc_average_between_schools(const vector<school_structure> &schools) {
+    float result = 0;
+    for (auto it = schools.begin(); it < schools.end(); it++) {
+        result += any_cast<float>(it->at("average_score"));
+    }
+
+    return result / schools.size();
+}
+
+
+
 int main() {
     srand ( time(NULL) );
     setlocale(LC_ALL, "Russian");
 
-    auto students = generate_students(50);
-    for (auto i = students.begin(); i < students.end(); i++) {
-        cout << "Student name: " << i->first << endl;
-        cout << "Student marks: ";
-        utils::print_array(i->second);
-    }
+    auto schools = form_schools(10);
+    auto average_score = calc_average_between_schools(schools);
+    cout << "GOT AVERAGE SCORE FOR ALL SCHOOLS: " << average_score << endl;
 
-    //utils::print_array(students);
+    for (auto i = schools.begin(); i < schools.end(); i++) {
+        if (any_cast<float>(i->at("average_score")) > average_score) {
+            cout << "School №" << any_cast<unsigned int>(i->at("number")) + 1
+                    << " has score higher than average" << endl;
+        }
+    }
 
     return 0;
 }

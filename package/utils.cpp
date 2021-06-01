@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <array>
+#include <map>
 
 namespace utils {
 
@@ -21,6 +22,13 @@ namespace utils {
             std::cout << *iterator << " ";
         }
         std::cout << "" << std::endl;
+    }
+
+
+    template<typename K, typename T>
+    void print_array(std::map<T, K> map) {
+        for (auto it = map.cbegin(); it != map.cend(); ++it)
+            std::cout << it->first << ": " << it->second << std::endl;
     }
 }
 
