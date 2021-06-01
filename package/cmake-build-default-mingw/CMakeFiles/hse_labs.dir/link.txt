@@ -1,3 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2020.3.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\hse_labs.dir/objects.a
-C:\Compilers\mingw64\bin\ar.exe cr CMakeFiles\hse_labs.dir/objects.a @CMakeFiles\hse_labs.dir\objects1.rsp
-C:\Compilers\mingw64\bin\g++.exe    -Wl,--whole-archive CMakeFiles\hse_labs.dir/objects.a -Wl,--no-whole-archive  -o hse_labs.exe -Wl,--out-implib,libhse_labs.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\hse_labs.dir\linklibs.rsp
