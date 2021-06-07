@@ -3,5 +3,5 @@ project(hse_labs)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(hse_labs utils.cpp 5.lambda.cpp)
+add_executable(hse_labs utils.cpp 6.machine.cpp)
 
